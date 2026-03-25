@@ -1,42 +1,104 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fil">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glassmorphism CSS-Only Calculator</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>💔 Hugot Calculator</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
-    <input type="radio" name="calc" id="val-0" checked>
-    <input type="radio" name="calc" id="val-1">
-    <input type="radio" name="calc" id="val-2">
-    <input type="radio" name="calc" id="val-3">
-    <input type="radio" name="calc" id="val-4">
-
-    <div class="calculator-card">
-        <div class="display">
-            <span class="num n0">0</span>
-            <span class="num n1">1</span>
-            <span class="num n2">2</span>
-            <span class="num n3">3</span>
-            <span class="num n4">4</span>
-        </div>
-
-        <div class="grid">
-            <label for="val-1" class="btn">1</label>
-            <label for="val-2" class="btn">2</label>
-            <label for="val-3" class="btn">3</label>
-            <label for="val-4" class="btn">4</label>
-            <label for="val-0" class="btn btn-clear">AC</label>
-            <div class="btn btn-disabled">+</div>
-            <div class="btn btn-disabled">-</div>
-            <div class="btn btn-equals">=</div>
-        </div>
-        
-        <p class="logic-note">CSS-Only State Logic Active</p>
+ 
+  <!-- Floating hearts background -->
+  <div class="hearts-bg" aria-hidden="true">
+    <span>💔</span><span>🥀</span><span>💌</span><span>💔</span>
+    <span>🥀</span><span>💌</span><span>💔</span><span>🥀</span>
+    <span>💌</span><span>💔</span><span>🥀</span><span>💌</span>
+  </div>
+ 
+  <!-- Soft vignette overlay -->
+  <div class="vignette"></div>
+ 
+  <div class="wrapper">
+ 
+    <!-- Header -->
+    <div class="header">
+      <div class="broken-heart">💔</div>
+      <div class="header-text">
+        <h1 class="title">Hugot</h1>
+        <h2 class="subtitle">Calculator</h2>
+      </div>
+      <div class="broken-heart flipped">💔</div>
     </div>
-
+ 
+    <!-- Message banner -->
+    <div class="message-banner">
+      <p class="message-text" id="messageText">ikaw lang ang sagot ko sa lahat ng tanong...</p>
+    </div>
+ 
+    <!-- Calculator -->
+    <div class="calculator" role="main" aria-label="Hugot Calculator">
+ 
+      <!-- Screen -->
+      <div class="screen-wrap">
+        <div class="equation-line" id="equationLine" aria-live="polite">&nbsp;</div>
+        <div class="screen" id="screen" aria-live="polite">0</div>
+      </div>
+ 
+      <!-- Buttons -->
+      <div class="buttons">
+ 
+        <!-- Row 1 -->
+        <button class="btn btn-util"   data-action="clear"    aria-label="Clear">AC</button>
+        <button class="btn btn-util"   data-action="sign"     aria-label="Toggle sign">+/−</button>
+        <button class="btn btn-util"   data-action="percent"  aria-label="Percent">%</button>
+        <button class="btn btn-op"     data-action="operator" data-value="÷" aria-label="Divide">÷</button>
+ 
+        <!-- Row 2 -->
+        <button class="btn btn-num"    data-action="number"   data-value="7" aria-label="Seven">7</button>
+        <button class="btn btn-num"    data-action="number"   data-value="8" aria-label="Eight">8</button>
+        <button class="btn btn-num"    data-action="number"   data-value="9" aria-label="Nine">9</button>
+        <button class="btn btn-op"     data-action="operator" data-value="×" aria-label="Multiply">×</button>
+ 
+        <!-- Row 3 -->
+        <button class="btn btn-num"    data-action="number"   data-value="4" aria-label="Four">4</button>
+        <button class="btn btn-num"    data-action="number"   data-value="5" aria-label="Five">5</button>
+        <button class="btn btn-num"    data-action="number"   data-value="6" aria-label="Six">6</button>
+        <button class="btn btn-op"     data-action="operator" data-value="−" aria-label="Minus">−</button>
+ 
+        <!-- Row 4 -->
+        <button class="btn btn-num"    data-action="number"   data-value="1" aria-label="One">1</button>
+        <button class="btn btn-num"    data-action="number"   data-value="2" aria-label="Two">2</button>
+        <button class="btn btn-num"    data-action="number"   data-value="3" aria-label="Three">3</button>
+        <button class="btn btn-op"     data-action="operator" data-value="+" aria-label="Plus">+</button>
+ 
+        <!-- Row 5 -->
+        <button class="btn btn-num btn-zero" data-action="number" data-value="0" aria-label="Zero">0</button>
+        <button class="btn btn-num"    data-action="decimal"  aria-label="Decimal">.</button>
+        <button class="btn btn-equals" data-action="equals"   aria-label="Equals">=</button>
+ 
+      </div>
+    </div>
+ 
+    <!-- Footer -->
+    <p class="footer-quote">"ang sakit... pero miss na kita." 🥀</p>
+ 
+  </div>
+ 
+  <!-- Hugot popup overlay -->
+  <div class="hugot-overlay" id="hugotOverlay" role="dialog" aria-modal="true" aria-label="Hugot message">
+    <div class="hugot-card" id="hugotCard">
+      <div class="hugot-emoji">💔</div>
+      <p class="hugot-main">MISS NA KITA,</p>
+      <p class="hugot-main hugot-accent">BALIK KA NA PLEASEE</p>
+      <div class="hugot-hearts">
+        <span>💔</span><span>🥀</span><span>💌</span><span>🥀</span><span>💔</span>
+      </div>
+      <button class="hugot-close" id="hugotClose" aria-label="Close">ge ingat... 😢</button>
+    </div>
+  </div>
+ 
+  <script src="cal.js"></script>
 </body>
 </html>
+
+

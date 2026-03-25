@@ -1,111 +1,217 @@
+/* ============================================================
+   HUGOT CALCULATOR — style.css (FIXED VERSION)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;600&display=swap');
+
 :root {
-    --glass: rgba(255, 255, 255, 0.1);
-    --border: rgba(255, 255, 255, 0.2);
-    --glow: rgba(0, 212, 255, 0.5);
+  --bg-from:      #1a0010;
+  --bg-to:        #0d001a;
+  --card-bg:      rgba(30, 5, 25, 0.85);
+  --card-border:  rgba(220, 80, 120, 0.25);
+  --screen-bg:    #0a0008;
+  --screen-text:  #ffd6e7;
+  --eq-text-color: rgba(255, 180, 200, 0.5); 
+  --num-bg:       rgba(60, 10, 40, 0.8);
+  --num-text:     #f5c2d8;
+  --op-bg:        rgba(160, 30, 80, 0.85);
+  --op-text:      #fff0f5;
+  --eq-bg:        linear-gradient(135deg, #c2185b, #ad1457, #880e4f);
+  --eq-text:      #fff;
+  --cream:        #ffeef4;
+  --radius-card:  24px;
+  --radius-btn:   16px;
+  --btn-h:        68px;
+  --gap:          10px;
 }
+
+/* ---------- Reset & Base ---------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-    background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0;
-    overflow: hidden;
+  min-height: 100vh;
+  background: radial-gradient(ellipse at 30% 20%, #3d0030 0%, var(--bg-from) 40%, var(--bg-to) 100%);
+  font-family: 'DM Sans', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-x: hidden;
+  position: relative;
+  color: var(--cream);
 }
 
-/* Glassmorphism Card */
-.calculator-card {
-    background: var(--glass);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid var(--border);
-    border-radius: 25px;
-    padding: 30px;
-    width: 320px;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-    text-align: center;
+/* ---------- Floating Hearts BG ---------- */
+.hearts-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
 }
 
-/* Digital Display */
-.display {
-    background: rgba(0, 0, 0, 0.3);
-    height: 70px;
-    border-radius: 15px;
-    margin-bottom: 25px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding: 0 20px;
-    border: 1px solid var(--border);
-    overflow: hidden;
+.hearts-bg span {
+  position: absolute;
+  bottom: -100px;
+  animation: riseHeart linear infinite;
+  opacity: 0;
+  filter: drop-shadow(0 0 5px rgba(255, 0, 0, 0.3));
 }
 
-.num {
-    font-family: 'Orbitron', monospace;
-    color: #00d4ff;
-    font-size: 2rem;
-    text-shadow: 0 0 10px var(--glow);
-    display: none; /* Hidden by default */
+@keyframes riseHeart {
+  0%   { transform: translateY(0) rotate(-10deg) scale(0.8); opacity: 0; }
+  10%  { opacity: 0.4; }
+  85%  { opacity: 0.2; }
+  100% { transform: translateY(-115vh) rotate(15deg) scale(1.2); opacity: 0; }
 }
 
-/* THE CSS LOGIC HACK */
-/* If radio 1 is checked, show span n1, etc. */
-#val-0:checked ~ .calculator-card .n0 { display: block; }
-#val-1:checked ~ .calculator-card .n1 { display: block; }
-#val-2:checked ~ .calculator-card .n2 { display: block; }
-#val-3:checked ~ .calculator-card .n3 { display: block; }
-#val-4:checked ~ .calculator-card .n4 { display: block; }
+/* Custom timings for the 12 spans in your HTML */
+.hearts-bg span:nth-child(4n+1) { animation-duration: 12s; left: 10%; }
+.hearts-bg span:nth-child(4n+2) { animation-duration: 15s; left: 35%; animation-delay: 2s; }
+.hearts-bg span:nth-child(4n+3) { animation-duration: 10s; left: 65%; animation-delay: 4s; }
+.hearts-bg span:nth-child(4n+4) { animation-duration: 18s; left: 85%; animation-delay: 1s; }
 
-/* Grid Layout */
-.grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
+/* ---------- Layout Wrapper ---------- */
+.wrapper {
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  max-width: 350px;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  text-align: center;
+}
+
+.title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.subtitle {
+  font-weight: 300;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.message-banner {
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--eq-text-color);
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+/* ---------- Calculator Box ---------- */
+.calculator {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
+  padding: 20px;
+  width: 100%;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
+
+.screen-wrap {
+  background: var(--screen-bg);
+  padding: 15px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  text-align: right;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.equation-line {
+  color: var(--eq-text-color);
+  font-size: 0.9rem;
+  min-height: 1.2rem;
+}
+
+.screen {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.8rem;
+  color: var(--screen-text);
+  overflow: hidden;
+}
+
+/* ---------- Buttons Grid ---------- */
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--gap);
 }
 
 .btn {
-    background: var(--glass);
-    border: 1px solid var(--border);
-    padding: 18px;
-    border-radius: 12px;
-    color: white;
-    cursor: pointer;
-    transition: 0.3s;
-    font-weight: bold;
-    user-select: none;
+  height: var(--btn-h);
+  border-radius: var(--radius-btn);
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  background: var(--num-bg);
+  color: var(--num-text);
 }
 
-.btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 0 15px var(--glow);
-    transform: translateY(-2px);
-}
+.btn:hover { background: var(--num-hover); transform: translateY(-2px); }
+.btn:active { transform: scale(0.95); }
 
-.btn:active {
-    transform: scale(0.95);
-}
-
-.btn-clear { color: #ff5e5e; }
+.btn-op { background: var(--op-bg); color: var(--op-text); }
+.btn-util { background: var(--util-bg); color: var(--util-text); }
 .btn-equals {
-    grid-column: span 2;
-    background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
-    border: none;
+  background: var(--eq-bg);
+  color: var(--eq-text);
+  grid-column: span 1; /* Adjust if you want it wider */
+}
+.btn-zero { grid-column: span 2; }
+
+/* ---------- Popup Overlay ---------- */
+.hugot-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
 }
 
-.btn-disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+.hugot-overlay.show { opacity: 1; pointer-events: auto; }
+
+.hugot-card {
+  background: #1a000f;
+  border: 1px solid var(--op-bg);
+  padding: 30px;
+  border-radius: 30px;
+  text-align: center;
+  max-width: 300px;
+  transform: scale(0.8);
+  transition: transform 0.4s cubic-bezier(0.17, 0.89, 0.32, 1.49);
 }
 
-input[type="radio"] {
-    display: none; /* Hide the actual radio buttons */
-}
+.hugot-overlay.show .hugot-card { transform: scale(1); }
 
-.logic-note {
-    color: rgba(255,255,255,0.4);
-    font-size: 0.7rem;
-    margin-top: 15px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+.hugot-main { font-size: 1.2rem; margin-bottom: 5px; }
+.hugot-accent { font-weight: 700; color: var(--pink-light); font-family: 'Playfair Display'; }
+
+.hugot-close {
+  margin-top: 20px;
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: none;
+  background: var(--op-bg);
+  color: white;
+  cursor: pointer;
 }
